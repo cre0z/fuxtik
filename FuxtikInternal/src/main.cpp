@@ -7,6 +7,11 @@
 #include "../ext/imgui/imgui.h"
 #include "../ext/imgui/imgui_impl_win32.h"
 #include "../ext/imgui/imgui_impl_dx11.h"
+#include <cstdlib>
+#include <ctime>
+#include <cstdio>
+#include <fcntl.h>
+#include <io.h>
 
 DWORD WINAPI InitHooksThread(LPVOID lpReserved)
 {
@@ -28,6 +33,7 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 	switch (dwReason)
 	{
 	case DLL_PROCESS_ATTACH:
+		srand((unsigned int)time(nullptr));
 		Base::module = hMod;
 		DisableThreadLibraryCalls(hMod);
 		CreateThread(nullptr, 0, InitHooksThread, hMod, 0, nullptr);

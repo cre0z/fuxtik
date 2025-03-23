@@ -2,9 +2,6 @@
 
 void Cheats::Visuals::ESP()
 {
-	/*
-	 * This currently only works on full screen because of how WorldToScreen() works.
-	 */
 	float(*ViewMatrix)[4][4] = (float(*)[4][4])(Cheats::client + Offsets::dwViewMatrix);
 
 	auto localPawn = *(uintptr_t*)(Cheats::client + Offsets::dwLocalPlayerPawn);
@@ -12,7 +9,7 @@ void Cheats::Visuals::ESP()
 	if (!localPawn)
 		return;
 
-	auto localTeam = *(int*)(Cheats::client + Offsets::m_iTeamNum);
+	auto localTeam = *(int*)(localPawn + Offsets::m_iTeamNum);
 	auto entityList = *(uintptr_t*)(Cheats::client + Offsets::dwEntityList);
 
 	if (!entityList)

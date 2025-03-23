@@ -108,4 +108,10 @@ namespace Offsets
         constexpr std::ptrdiff_t m_flLastMagDropRequestTime = 0x1B00; // GameTime_t
         constexpr std::ptrdiff_t m_flWatTickOffset = 0x1B04; // float32
     }
+
+    namespace C_BaseEntity {
+        constexpr std::ptrdiff_t m_iHealth = 836;
+        constexpr std::ptrdiff_t m_iTeamNum = 995;
+        constexpr std::ptrdiff_t m_iIDEntIndex = 5208;
+    }
 }
