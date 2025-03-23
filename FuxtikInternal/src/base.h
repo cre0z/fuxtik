@@ -3,26 +3,32 @@
 #include <d3d11.h>
 #include <cstdbool>
 
-typedef HRESULT(__stdcall* Present) (IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
-typedef LRESULT(CALLBACK* WNDPROC)(HWND, UINT, WPARAM, LPARAM);
-typedef uintptr_t PTR;
 
 namespace Base
 {
-	extern Present oPresent;
+	using Present_t = HRESULT(__stdcall*)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
+	using WNDPROC_t = LRESULT(CALLBACK*)(HWND, UINT, WPARAM, LPARAM);
+
+	extern Present_t oPresent;
+	extern WNDPROC_t oWndProc;
+
+	extern HANDLE module;
 	extern HWND window;
-	extern WNDPROC oWndProc;
-	extern ID3D11Device* pDevice;
-	extern ID3D11DeviceContext* pContext;
-	extern IDXGISwapChain* pSwapChain;
+	extern ID3D11Device* device;
+	extern ID3D11DeviceContext* context;
+	extern IDXGISwapChain* swapChain;
 	extern ID3D11RenderTargetView* mainRenderTargetView;
 
-	extern bool IsInitialized;
-	extern bool ShouldDetach;
-	extern bool PreventClickthrough;
+	extern bool isInitialized;
+	extern bool shouldDetach;
+	extern bool preventClickthrough;
 
-	extern bool ShowMenu;
+	extern bool showMenu;
 
-	void Init();
+	void Init(IDXGISwapChain* pSwapChain);
 	void Shutdown();
+	void Detach(IDXGISwapChain* pSwapChain);
+
+	HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
+	LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 }

@@ -4,6 +4,15 @@
 
 namespace Offsets
 {
+    constexpr std::ptrdiff_t dwLocalPlayerPawn = 0x188CF70;
+    constexpr std::ptrdiff_t dwEntityList = 0x1A38800;
+    constexpr std::ptrdiff_t dwViewMatrix = 0x1AA45F0;
+
+    constexpr std::ptrdiff_t m_hPlayerPawn = 0x814;
+    constexpr std::ptrdiff_t m_iHealth = 0x344;
+    constexpr std::ptrdiff_t m_iTeamNum = 0x3E3;
+    constexpr std::ptrdiff_t m_vOldOrigin = 0x1324;
+
 	namespace Buttons
 	{
         constexpr std::ptrdiff_t Attack = 0x1885770;

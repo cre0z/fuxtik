@@ -5,15 +5,15 @@ void Cheats::Visuals::ESP()
 	/*
 	 * This currently only works on full screen because of how WorldToScreen() works.
 	 */
-	float(*ViewMatrix)[4][4] = (float(*)[4][4])(Cheats::client + O::dwViewMatrix);
+	float(*ViewMatrix)[4][4] = (float(*)[4][4])(Cheats::client + Offsets::dwViewMatrix);
 
-	auto localPawn = *(uintptr_t*)(Cheats::client + O::dwLocalPlayerPawn);
+	auto localPawn = *(uintptr_t*)(Cheats::client + Offsets::dwLocalPlayerPawn);
 
 	if (!localPawn)
 		return;
 
-	auto localTeam = *(int*)(Cheats::client + O::m_iTeamNum);
-	auto entityList = *(uintptr_t*)(Cheats::client + O::dwEntityList);
+	auto localTeam = *(int*)(Cheats::client + Offsets::m_iTeamNum);
+	auto entityList = *(uintptr_t*)(Cheats::client + Offsets::dwEntityList);
 
 	if (!entityList)
 		return;
@@ -27,7 +27,7 @@ void Cheats::Visuals::ESP()
 		if (!playerController)
 			continue;
 
-		uint32_t playerPawn = *(uint32_t*)(playerController + O::m_hPlayerPawn);
+		uint32_t playerPawn = *(uint32_t*)(playerController + Offsets::m_hPlayerPawn);
 		if (!playerPawn)
 			continue;
 
@@ -39,15 +39,15 @@ void Cheats::Visuals::ESP()
 		if (!pCSPlayerPawnPtr)
 			continue;
 
-		int health = *(int*)(pCSPlayerPawnPtr + O::m_iHealth);
+		int health = *(int*)(pCSPlayerPawnPtr + Offsets::m_iHealth);
 		if (!health || health > 100)
 			continue;
 
-		int team = *(int*)(pCSPlayerPawnPtr + O::m_iTeamNum);
+		int team = *(int*)(pCSPlayerPawnPtr + Offsets::m_iTeamNum);
 		if (team == localTeam)
 			continue;
 
-		Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + O::m_vOldOrigin);
+		Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + Offsets::m_vOldOrigin);
 		Vec3 headpos = { feetpos.x + 0.0f, feetpos.y + 0.0f, feetpos.z + 72.0f };
 
 		Vec2 feet, head;

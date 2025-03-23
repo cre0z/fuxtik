@@ -1,8 +1,11 @@
 #include <chrono>
 #include <ctime>
+#include <sstream>
+#include <iomanip>
+#include <string>
 
 #include "menu.h"
-#include "../config/config.h"
+#include "../config.h"
 #include "../base.h"
 #include "../features/visual/visuals.h"
 
@@ -11,136 +14,134 @@
 #include "../../ext/imgui/imgui_impl_win32.h"
 #include "../../ext/imgui/imgui_impl_dx11.h"
 
-void Menu::CreateImGuiStyle()
-{
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.WindowMinSize = ImVec2(160, 20);
-    style.FramePadding = ImVec2(4, 2);
-    style.ItemSpacing = ImVec2(6, 2);
-    style.ItemInnerSpacing = ImVec2(6, 4);
-    style.Alpha = 0.95f;
-    style.WindowRounding = 4.0f;
-    style.FrameRounding = 2.0f;
-    style.IndentSpacing = 6.0f;
-    style.ItemInnerSpacing = ImVec2(2, 4);
-    style.ColumnsMinSpacing = 50.0f;
-    style.GrabMinSize = 14.0f;
-    style.GrabRounding = 16.0f;
-    style.ScrollbarSize = 12.0f;
-    style.ScrollbarRounding = 16.0f;
+namespace Menu {
 
-    style.Colors[ImGuiCol_Text] = ImVec4(0.86f, 0.93f, 0.89f, 0.78f);
-    style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.86f, 0.93f, 0.89f, 0.28f);
-    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.13f, 0.14f, 0.17f, 1.00f);
-    style.Colors[ImGuiCol_Border] = ImVec4(0.31f, 0.31f, 1.00f, 0.00f);
-    style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-    style.Colors[ImGuiCol_FrameBg] = ImVec4(0.20f, 0.22f, 0.27f, 1.00f);
-    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
-    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_TitleBg] = ImVec4(0.20f, 0.22f, 0.27f, 1.00f);
-    style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.20f, 0.22f, 0.27f, 0.75f);
-    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.20f, 0.22f, 0.27f, 0.47f);
-    style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.20f, 0.22f, 0.27f, 1.00f);
-    style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.09f, 0.15f, 0.16f, 1.00f);
-    style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
-    style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_CheckMark] = ImVec4(0.71f, 0.22f, 0.27f, 1.00f);
-    style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.47f, 0.77f, 0.83f, 0.14f);
-    style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_Button] = ImVec4(0.47f, 0.77f, 0.83f, 0.14f);
-    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.86f);
-    style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_Header] = ImVec4(0.92f, 0.18f, 0.29f, 0.76f);
-    style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.86f);
-    style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_Separator] = ImVec4(0.14f, 0.16f, 0.19f, 1.00f);
-    style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
-    style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.47f, 0.77f, 0.83f, 0.04f);
-    style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
-    style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_PlotLines] = ImVec4(0.86f, 0.93f, 0.89f, 0.63f);
-    style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.86f, 0.93f, 0.89f, 0.63f);
-    style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
-    style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.92f, 0.18f, 0.29f, 0.43f);
-    style.Colors[ImGuiCol_PopupBg] = ImVec4(0.20f, 0.22f, 0.27f, 0.9f);
-    style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.20f, 0.22f, 0.27f, 0.73f);
-    
-    // TODO: Change font to Ruda Bold
-    /*
-    ImFontConfig font;
-    font.FontDataOwnedByAtlas = false;
-    io.Fonts->AddFontFromMemoryTTF((void*)ruda_bold, sizeof(ruda_bold), 18.5f, &font);
-    */
-}
+    constexpr float WINDOW_MIN_WIDTH = 160.0f;
+    constexpr float WINDOW_MIN_HEIGHT = 20.0f;
 
-void Menu::CreateWatermark()
-{
-    auto start = std::chrono::system_clock::now();
-    auto end = std::chrono::system_clock::now();
-    char timestr[30];
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-    ctime_s(timestr, sizeof(timestr), &end_time);
-
-    ImGui::SetNextWindowPos({ 15, 45 });
-    ImGui::SetNextWindowSize({ 296, 50 });
-
-    ImGui::Begin("Watermark", NULL,
-        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground);
-
-    ImGui::Text("Fuxtick v0.1 | %s", timestr);
-    ImGui::End();
-}
-
-void Menu::CreateMenu()
-{
-    ImGui::SetNextWindowSize(ImVec2(Menu::WIDTH, Menu::HEIGHT));
-    ImGui::Begin("Fuxtick v0.1 | creozthagreatest", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-    Base::PreventClickthrough = false;
-    if (ImGui::IsItemHovered() || ImGui::IsWindowHovered())
+    void CreateImGuiStyle()
     {
-        Base::PreventClickthrough = true;
-    }
-    
-    ImGui::SameLine();
-    if (ImGui::Button("Main", ImVec2(150, 30)))
-    {
-        Menu::currentTab = TAB_MAIN;
+        ImGuiStyle& style = ImGui::GetStyle();
+        style.WindowMinSize = ImVec2(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
+        style.FramePadding = ImVec2(4, 2);
+        style.ItemSpacing = ImVec2(6, 2);
+        style.ItemInnerSpacing = ImVec2(6, 4);
+        style.Alpha = 0.95f;
+        style.WindowRounding = 4.0f;
+        style.FrameRounding = 2.0f;
+        style.IndentSpacing = 6.0f;
+        style.ColumnsMinSpacing = 50.0f;
+        style.GrabMinSize = 14.0f;
+        style.GrabRounding = 16.0f;
+        style.ScrollbarSize = 12.0f;
+        style.ScrollbarRounding = 16.0f;
+
+        auto& colors = style.Colors;
+        colors[ImGuiCol_Text] = ImVec4(0.86f, 0.93f, 0.89f, 0.78f);
+        colors[ImGuiCol_TextDisabled] = ImVec4(0.86f, 0.93f, 0.89f, 0.28f);
+        colors[ImGuiCol_WindowBg] = ImVec4(0.13f, 0.14f, 0.17f, 1.00f);
+        colors[ImGuiCol_Border] = ImVec4(0.31f, 0.31f, 1.00f, 0.00f);
+        colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+        colors[ImGuiCol_FrameBg] = ImVec4(0.20f, 0.22f, 0.27f, 1.00f);
+        colors[ImGuiCol_FrameBgHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
+        colors[ImGuiCol_FrameBgActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_TitleBg] = ImVec4(0.20f, 0.22f, 0.27f, 1.00f);
+        colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.20f, 0.22f, 0.27f, 0.75f);
+        colors[ImGuiCol_TitleBgActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_MenuBarBg] = ImVec4(0.20f, 0.22f, 0.27f, 0.47f);
+        colors[ImGuiCol_ScrollbarBg] = ImVec4(0.20f, 0.22f, 0.27f, 1.00f);
+        colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.09f, 0.15f, 0.16f, 1.00f);
+        colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
+        colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_CheckMark] = ImVec4(0.71f, 0.22f, 0.27f, 1.00f);
+        colors[ImGuiCol_SliderGrab] = ImVec4(0.47f, 0.77f, 0.83f, 0.14f);
+        colors[ImGuiCol_SliderGrabActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_Button] = ImVec4(0.47f, 0.77f, 0.83f, 0.14f);
+        colors[ImGuiCol_ButtonHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.86f);
+        colors[ImGuiCol_ButtonActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_Header] = ImVec4(0.92f, 0.18f, 0.29f, 0.76f);
+        colors[ImGuiCol_HeaderHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.86f);
+        colors[ImGuiCol_HeaderActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_Separator] = ImVec4(0.14f, 0.16f, 0.19f, 1.00f);
+        colors[ImGuiCol_SeparatorHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
+        colors[ImGuiCol_SeparatorActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_ResizeGrip] = ImVec4(0.47f, 0.77f, 0.83f, 0.04f);
+        colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
+        colors[ImGuiCol_ResizeGripActive] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_PlotLines] = ImVec4(0.86f, 0.93f, 0.89f, 0.63f);
+        colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_PlotHistogram] = ImVec4(0.86f, 0.93f, 0.89f, 0.63f);
+        colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.92f, 0.18f, 0.29f, 1.00f);
+        colors[ImGuiCol_TextSelectedBg] = ImVec4(0.92f, 0.18f, 0.29f, 0.43f);
+        colors[ImGuiCol_PopupBg] = ImVec4(0.20f, 0.22f, 0.27f, 0.9f);
+        colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.20f, 0.22f, 0.27f, 0.73f);
+
+        // Optional: Configure font (e.g., Ruda Bold) if desired.
+        /*
+        ImFontConfig fontConfig;
+        fontConfig.FontDataOwnedByAtlas = false;
+        io.Fonts->AddFontFromMemoryTTF((void*)ruda_bold, sizeof(ruda_bold), 18.5f, &fontConfig);
+        */
     }
 
-    ImGui::SameLine();
-    if (ImGui::Button("Aimbot", ImVec2(150, 30)))
+    std::string GetCurrentTimeString()
     {
-        Menu::currentTab = TAB_AIMBOT;
+        using namespace std::chrono;
+        auto now = system_clock::now();
+        std::time_t now_c = system_clock::to_time_t(now);
+        std::tm localTime{};
+#if defined(_MSC_VER)
+        localtime_s(&localTime, &now_c);
+#else
+        localtime_r(&now_c, &localTime);
+#endif
+        std::ostringstream oss;
+        oss << std::put_time(&localTime, "%c");
+        return oss.str();
     }
 
-    ImGui::SameLine();
-    if (ImGui::Button("Visuals", ImVec2(150, 30)))
+    void CreateWatermark()
     {
-        Menu::currentTab = TAB_VISUALS;
+        ImVec2 displaySize = ImGui::GetIO().DisplaySize;
+
+        ImVec2 relativePos(displaySize.x * 0.15f, displaySize.y * 0.1f);
+
+        ImGui::SetNextWindowPos(relativePos);
+        ImGui::SetNextWindowSize({ 296, 50 });
+
+        ImGui::Begin("Watermark", nullptr,
+            ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground);
+
+        std::string timeStr = GetCurrentTimeString();
+        ImGui::Text("Fuxtick " STR_VERSION " | %s", timeStr.c_str());
+        ImGui::End();
     }
 
-    ImGui::SameLine();
-    if (ImGui::Button("Misc", ImVec2(150, 30)))
+    Tab currentTab = Tab::Main;
+
+    void RenderTabButtons()
     {
-        Menu::currentTab = TAB_MISC;
+        auto renderTabButton = [](const char* label, Tab tab) {
+            if (ImGui::Button(label, ImVec2(150, 30)))
+            {
+                currentTab = tab;
+            }
+            ImGui::SameLine();
+            };
+
+        renderTabButton("Main", Tab::Main);
+        renderTabButton("Aim", Tab::Aim);
+        renderTabButton("Visuals", Tab::Visuals);
+        renderTabButton("Misc", Tab::Misc);
+        renderTabButton("Info", Tab::Info);
+        ImGui::NewLine();
+        ImGui::Separator();
     }
 
-    ImGui::SameLine();
-    if (ImGui::Button("Info", ImVec2(150, 30)))
+    void RenderMainTab()
     {
-        Menu::currentTab = TAB_INFO;
-    }
-
-    ImGui::Separator();
-
-    switch (Menu::currentTab)
-    {
-    case TAB_MAIN:
-        ImGui::Text("Welcome to Fuxtick v0.1!");
+        ImGui::Text("Welcome to Fuxtick " STR_VERSION "!");
         if (ImGui::Button("Panic mode!"))
         {
             Base::Shutdown();
@@ -150,15 +151,25 @@ void Menu::CreateMenu()
         {
             ImGui::SetTooltip("Ends hook and allows reinjection.");
         }
-        break;
-    case TAB_VISUALS:
+    }
+
+    void RenderAimTab()
+    {
+        ImGui::Checkbox("Triggerbot", &Config::Aim::TriggerBot);
+        ImGui::Text("Aimbot settings go here.");
+    }
+
+    void RenderVisualsTab()
+    {
         ImGui::Checkbox("ESP", &Config::Visuals::ESP);
         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
         {
             ImGui::SetTooltip("Enables ESP.");
         }
-        break;
-    case TAB_MISC:
+    }
+
+    void RenderMiscTab()
+    {
         ImGui::Checkbox("Watermark", &Config::ShowWatermark);
         ImGui::Checkbox("Bunnyhop", &Config::Misc::Bhop);
         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
@@ -171,10 +182,45 @@ void Menu::CreateMenu()
         {
             ImGui::SetTooltip("Play a sound when you hit a player.");
         }
-        break;
-    default:
-        break;
     }
 
-    ImGui::End();
-}
+    void RenderInfoTab()
+    {
+        ImGui::Text("Info tab content goes here.");
+    }
+
+    void CreateMenu()
+    {
+        ImGui::SetNextWindowSize(ImVec2(Menu::WIDTH, Menu::HEIGHT));
+        ImGui::Begin("Fuxtick " STR_VERSION " | " STR_AUTHORS, nullptr,
+            ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+
+        Base::preventClickthrough = ImGui::IsItemHovered() || ImGui::IsWindowHovered();
+
+        RenderTabButtons();
+
+        switch (currentTab)
+        {
+        case Tab::Main:
+            RenderMainTab();
+            break;
+        case Tab::Aim:
+            RenderAimTab();
+            break;
+        case Tab::Visuals:
+            RenderVisualsTab();
+            break;
+        case Tab::Misc:
+            RenderMiscTab();
+            break;
+        case Tab::Info:
+            RenderInfoTab();
+            break;
+        default:
+            break;
+        }
+
+        ImGui::End();
+    }
+
+} // namespace Menu

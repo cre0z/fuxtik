@@ -1,0 +1,17 @@
+*
+
+!.gitignore
+!*.sln
+!FuxtikInternal/
+!FuxtikInternal/**
+
+FuxtikInternal/**/x64/
+FuxtikInternal/**/Release/
+FuxtikInternal/**/Debug/
+FuxtikInternal/**/ipch/
+FuxtikInternal/**/*.obj
+FuxtikInternal/**/*.pdb
+FuxtikInternal/**/*.log
+FuxtikInternal/**/*.idb
+FuxtikInternal/**/*.tlog
+FuxtikInternal/**/*.vcxproj.user

@@ -145,11 +145,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\features\cheats.cpp" />
     <ClCompile Include="src\features\misc\bhop.cpp" />
     <ClCompile Include="src\features\misc\hitsound.cpp" />
     <ClCompile Include="src\base.cpp" />
-    <ClCompile Include="src\config\config.cpp" />
     <ClCompile Include="ext\imgui\imgui.cpp" />
     <ClCompile Include="ext\imgui\imgui_demo.cpp" />
     <ClCompile Include="ext\imgui\imgui_draw.cpp" />
@@ -178,7 +178,7 @@
     <ClInclude Include="src\features\misc\bhop.h" />
     <ClInclude Include="src\features\misc\hitsound.h" />
     <ClInclude Include="src\base.h" />
-    <ClInclude Include="src\config\config.h" />
+    <ClInclude Include="src\config.h" />
     <ClInclude Include="ext\imgui\imconfig.h" />
     <ClInclude Include="ext\imgui\imgui.h" />
     <ClInclude Include="ext\imgui\imgui_impl_dx11.h" />
@@ -190,7 +190,6 @@
     <ClInclude Include="src\features\offsets.h" />
     <ClInclude Include="src\menu\menu.h" />
     <ClInclude Include="src\features\visual\visuals.h" />
-    <ClInclude Include="src\includes.h" />
     <ClInclude Include="ext\kiero\kiero.h" />
     <ClInclude Include="ext\kiero\minhook\include\MinHook.h" />
     <ClInclude Include="ext\kiero\minhook\src\buffer.h" />
