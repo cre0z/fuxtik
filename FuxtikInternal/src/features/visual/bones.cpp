@@ -1,15 +1,25 @@
+#include "bones.h"
+
 #include <iostream>
 
 #include "visuals.h"
 #include "../../config/config.h"
+#include "../../math/math.h"
+#include "../../math/vector.h"
 
-void Cheats::Visuals::ESP()
+void Cheats::Visuals::BonesESP()
 {
 	float(*ViewMatrix)[4][4] = (float(*)[4][4])(Cheats::client + Offsets::dwViewMatrix);
 
 	auto localPawn = *(uintptr_t*)(Cheats::client + Offsets::dwLocalPlayerPawn);
 	if (!localPawn)
 		return;
+
+	uintptr_t localGameScene = *(uintptr_t*)(localPawn + Offsets::C_BaseEntity::m_pGameSceneNode);
+
+	Vec3 origin = *(Vec3*)(localPawn + Offsets::m_vOldOrigin);
+	uintptr_t localBoneArray = *(uintptr_t*)(localGameScene + Offsets::CGameSceneNode::CSkeletonInstance::m_modelState + 0x80);
+	Vector localEyePos = *(Vector*)(localBoneArray + 6 * 32);
 
 	auto localTeam = *(int*)(localPawn + Offsets::m_iTeamNum);
 	auto entityList = *(uintptr_t*)(Cheats::client + Offsets::dwEntityList);
@@ -51,7 +61,7 @@ void Cheats::Visuals::ESP()
 			continue;
 
 		Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + Offsets::m_vOldOrigin);
-		Vec3 headpos = { feetpos.x + 0.0f, feetpos.y + 0.0f, feetpos.z + 75.0f };
+		Vec3 headpos = { feetpos.x + 0.0f, feetpos.y + 0.0f, feetpos.z + 72.0f };
 
 		Vec2 feet, head;
 
@@ -62,7 +72,7 @@ void Cheats::Visuals::ESP()
 			float x = feet.x - width / 2.0f;
 			float y = head.y;
 
-			ImGui::GetBackgroundDrawList()->AddRect({x, y}, {x + width, y + height}, ImColor(255,255,255));
+			ImGui::GetBackgroundDrawList()->AddRect({ x, y }, { x + width, y + height }, ImColor(255, 255, 255));
 		}
 	}
 }

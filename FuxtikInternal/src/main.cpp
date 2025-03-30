@@ -15,6 +15,12 @@
 
 DWORD WINAPI InitHooksThread(LPVOID lpReserved)
 {
+#ifdef _DEBUG
+	AllocConsole();
+	FILE* file;
+	freopen_s(&file, "CONOUT$", "w", stdout);
+#endif
+
 	bool init_hook = false;
 	do
 	{

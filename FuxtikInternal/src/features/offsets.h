@@ -4,14 +4,31 @@
 
 namespace Offsets
 {
+    constexpr std::ptrdiff_t dwLocalPlayerController = 0x1A89E90;
     constexpr std::ptrdiff_t dwLocalPlayerPawn = 0x188CF70;
+
     constexpr std::ptrdiff_t dwEntityList = 0x1A38800;
     constexpr std::ptrdiff_t dwViewMatrix = 0x1AA45F0;
+    constexpr std::ptrdiff_t dwViewAngles = 0x1AAE880;
 
     constexpr std::ptrdiff_t m_hPlayerPawn = 0x814;
     constexpr std::ptrdiff_t m_iHealth = 0x344;
     constexpr std::ptrdiff_t m_iTeamNum = 0x3E3;
+    constexpr std::ptrdiff_t m_pClippingWeapon = 0x13A0;
     constexpr std::ptrdiff_t m_vOldOrigin = 0x1324;
+    constexpr std::ptrdiff_t m_aimPunchAngle = 0x1584;
+
+    constexpr std::ptrdiff_t m_bIsDefusing = 0x23EA;
+
+    constexpr std::ptrdiff_t m_iAmmoLastCheck = 0x1764;
+    constexpr std::ptrdiff_t m_iAmmo = 0x60;
+    constexpr std::ptrdiff_t m_iClip1 = 0x1678;
+    constexpr std::ptrdiff_t m_iClip2 = 0x167C;
+
+    constexpr std::ptrdiff_t m_entitySpottedState = 0x23D0;
+    constexpr std::ptrdiff_t m_bSpottedByMask = 0xC;
+
+    constexpr std::ptrdiff_t m_fFlags = 0x3EC;
 
 	namespace Buttons
 	{
@@ -113,5 +130,17 @@ namespace Offsets
         constexpr std::ptrdiff_t m_iHealth = 836;
         constexpr std::ptrdiff_t m_iTeamNum = 995;
         constexpr std::ptrdiff_t m_iIDEntIndex = 5208;
+
+        constexpr std::ptrdiff_t m_vecViewOffset = 0xCB0;
+
+        constexpr std::ptrdiff_t m_pGameSceneNode = 0x328;
+    }
+
+    namespace CGameSceneNode {
+        constexpr std::ptrdiff_t m_vecAbsOrigin = 0xD0;
+
+        namespace CSkeletonInstance {
+            constexpr std::ptrdiff_t m_modelState = 0x170;
+        }
     }
 }

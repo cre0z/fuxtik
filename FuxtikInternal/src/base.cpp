@@ -7,6 +7,7 @@
 #include "features/visual/visuals.h"
 #include "features/misc/bhop.h"
 #include "features/aim/triggerbot.h"
+#include "features/aim/aimbot.h"
 #include "features/offsets.h"
 #include "menu/menu.h"
 
@@ -67,6 +68,8 @@ void Base::Shutdown()
 
 void Base::Detach(IDXGISwapChain* pSwapChain)
 {
+	FreeConsole();
+
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
@@ -129,6 +132,16 @@ HRESULT __stdcall Base::hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval,
 		return oPresent(pSwapChain, SyncInterval, Flags);
 	}
 
+	if (Config::Aim::Aimbot)
+	{
+		Cheats::Aim::Aimbot();
+	}
+
+	if (Config::Aim::TriggerBot)
+	{
+		Cheats::Aim::Triggerbot();
+	}
+
 	if (Config::Visuals::ESP)
 	{
 		Cheats::Visuals::ESP();
@@ -137,11 +150,6 @@ HRESULT __stdcall Base::hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval,
 	if (Config::Misc::Bhop)
 	{
 		Cheats::Misc::Bhop();
-	}
-
-	if (Config::Aim::TriggerBot)
-	{
-		Cheats::Aim::Triggerbot();
 	}
 
 	ImGui::Render();

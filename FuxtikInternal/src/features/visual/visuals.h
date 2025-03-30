@@ -13,5 +13,6 @@ namespace Cheats
     namespace Visuals
     {
         void ESP();
+        void BonesESP();
     }
 }

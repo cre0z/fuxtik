@@ -150,8 +150,36 @@ void RenderMainTab()
     }
 }
 
+std::vector<const char *> boneList = {
+    "Head",
+    "Body",
+    "Left Arm",
+    "Right Arm",
+    "Left Leg",
+    "Right Leg"
+};
+
 void RenderAimTab()
 {
+    ImGui::Checkbox("Aimbot", &Config::Aim::Aimbot);
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+    {
+        ImGui::SetTooltip("Enables Aimbot.");
+    }
+
+    ImGui::ListBox("Target bone", &Config::Aim::AimbotTargetBone, boneList.data(), static_cast<int>(boneList.size()));
+
+    ImGui::SliderFloat("FOV", &Config::Aim::AimbotFOV, 0.f, 50.f, "%.2f");
+    ImGui::SliderFloat("Smoothing", &Config::Aim::AimbotSmoothing, 0.f, 10.f, "%.2f");
+
+    ImGui::Checkbox("RCS", &Config::Aim::RCS);
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+    {
+        ImGui::SetTooltip("Enables aim punch compensation.");
+    }
+
+    ImGui::Separator();
+
     ImGui::Checkbox("Triggerbot", &Config::Aim::TriggerBot);
     ImGui::Text("Aimbot settings go here.");
 }
@@ -161,6 +189,11 @@ void RenderVisualsTab()
     ImGui::Checkbox("ESP", &Config::Visuals::ESP);
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
         ImGui::SetTooltip("Enables ESP.");
+    }
+
+    ImGui::Checkbox("Bones ESP", &Config::Visuals::BonesESP);
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
+        ImGui::SetTooltip("Show player bones.");
     }
 }
 

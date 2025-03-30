@@ -18,6 +18,7 @@ namespace Config
 	namespace Visuals
 	{
 		extern bool ESP;
+		extern bool BonesESP;
 	}
 
 	namespace Misc
@@ -30,6 +31,11 @@ namespace Config
 
 	namespace Aim
 	{
+		extern bool Aimbot;
+		extern float AimbotFOV;
+		extern float AimbotSmoothing;
+		extern int AimbotTargetBone;
+		extern bool RCS;
 		extern bool TriggerBot;
 	}
 }
