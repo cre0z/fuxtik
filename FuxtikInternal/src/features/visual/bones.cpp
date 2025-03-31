@@ -52,6 +52,9 @@ void Cheats::Visuals::BonesESP()
 		if (!pCSPlayerPawnPtr)
 			continue;
 
+		uintptr_t playerGameScene = *(uintptr_t*)(pCSPlayerPawnPtr + Offsets::C_BaseEntity::m_pGameSceneNode);
+		uintptr_t playerBoneArray = *(uintptr_t*)(playerGameScene + Offsets::CGameSceneNode::CSkeletonInstance::m_modelState + 0x80);
+
 		int health = *(int*)(pCSPlayerPawnPtr + Offsets::m_iHealth);
 		if (!health || health > 100)
 			continue;
@@ -60,19 +63,21 @@ void Cheats::Visuals::BonesESP()
 		if (team == localTeam && Config::DeathmatchMode != true)
 			continue;
 
-		Vec3 feetpos = *(Vec3*)(pCSPlayerPawnPtr + Offsets::m_vOldOrigin);
-		Vec3 headpos = { feetpos.x + 0.0f, feetpos.y + 0.0f, feetpos.z + 72.0f };
+		for (int i = 0; i < sizeof(boneConnections) / sizeof(boneConnections[0]); i++)
+		{
+			int bone1 = boneConnections[i].bone1;
+			int bone2 = boneConnections[i].bone2;
 
-		Vec2 feet, head;
+			Vec3 vectorBone1 = *(Vec3*)(playerBoneArray + bone1 * 32);
+			Vec3 vectorBone2 = *(Vec3*)(playerBoneArray + bone2 * 32);
 
-		if (feetpos.WorldToScreen(feet, ViewMatrix) && headpos.WorldToScreen(head, ViewMatrix)) {
-			float height = (feet.y - head.y) * 1.25f;
-			float width = height / 2.0f;
+			Vec2 vb1, vb2;
 
-			float x = feet.x - width / 2.0f;
-			float y = head.y;
-
-			ImGui::GetBackgroundDrawList()->AddRect({ x, y }, { x + width, y + height }, ImColor(255, 255, 255));
+			if (vectorBone1.WorldToScreen(vb1, ViewMatrix) &&
+				vectorBone2.WorldToScreen(vb2, ViewMatrix))
+			{
+				ImGui::GetBackgroundDrawList()->AddLine({ vb1.x, vb1.y }, { vb2.x, vb2.y }, ImColor(255, 255, 255), 1.5f);
+			}
 		}
 	}
 }

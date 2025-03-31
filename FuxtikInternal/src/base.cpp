@@ -147,6 +147,11 @@ HRESULT __stdcall Base::hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval,
 		Cheats::Visuals::ESP();
 	}
 
+	if (Config::Visuals::BonesESP)
+	{
+		Cheats::Visuals::BonesESP();
+	}
+
 	if (Config::Misc::Bhop)
 	{
 		Cheats::Misc::Bhop();
