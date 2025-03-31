@@ -1,6 +1,7 @@
 #include "aimbot.h"
 #include "../offsets.h"
 #include "../cheats.h"
+#include "../../base.h"
 #include "../../math/math.h"
 #include "../../math/vector.h"
 #include "../../config/config.h"
@@ -81,6 +82,7 @@ void Cheats::Aim::Aimbot()
 
 	Vec3 bestAngle;
 	float bestFov = 5.f;
+	int localIndex = 0;
 
 	for (int i = 1; i < 64; i++) {
 		uintptr_t listEntry1 = *(uintptr_t*)(entityList + (8 * (i & 0x7FFF) >> 9) + 16);
@@ -93,6 +95,26 @@ void Cheats::Aim::Aimbot()
 
 		uint32_t playerPawn = *(uint32_t*)(playerController + Offsets::m_hPlayerPawn);
 		if (!playerPawn)
+			continue;
+
+		if (playerPawn == localPawn)
+		{
+			localIndex = i;
+			break;
+		}
+	}
+
+	for (int i = 1; i < 64; i++) {
+		uintptr_t listEntry1 = *(uintptr_t*)(entityList + (8 * (i & 0x7FFF) >> 9) + 16);
+		if (!listEntry1)
+			continue;
+
+		uintptr_t playerController = *(uintptr_t*)(listEntry1 + 120 * (i & 0x1FF));
+		if (!playerController)
+			continue;
+
+		uint32_t playerPawn = *(uint32_t*)(playerController + Offsets::m_hPlayerPawn);
+		if (!playerPawn || playerPawn == localPawn)
 			continue;
 
 		uintptr_t listEntry2 = *(uintptr_t*)(entityList + 0x8 * ((playerPawn & 0x7FFF) >> 9) + 16);
@@ -111,7 +133,7 @@ void Cheats::Aim::Aimbot()
 		if (team == localTeam && Config::DeathmatchMode != true)
 			continue;
 
-		uint32_t entitySpotted = *(uint32_t*)(player + Offsets::m_entitySpottedState + Offsets::m_bSpottedByMask) & (1 << localPawn);
+		uint32_t entitySpotted = *(uint32_t*)(player + Offsets::m_entitySpottedState + Offsets::m_bSpottedByMask) & (1 << localIndex - 1);
 		if (!entitySpotted)
 			continue;
 

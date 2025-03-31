@@ -1,14 +1,16 @@
 #include "base.h"
-#include "../ext/kiero/kiero.h"
-#include "../ext/imgui/imgui.h"
-#include "../ext/imgui/imgui_impl_win32.h"
-#include "../ext/imgui/imgui_impl_dx11.h"
 #include "config/config.h"
 #include "features/visual/visuals.h"
+#include "features/visual/bones.h"
+#include "features/visual/skinchanger.h"
 #include "features/misc/bhop.h"
 #include "features/aim/triggerbot.h"
 #include "features/aim/aimbot.h"
 #include "features/offsets.h"
+#include "../ext/kiero/kiero.h"
+#include "../ext/imgui/imgui.h"
+#include "../ext/imgui/imgui_impl_win32.h"
+#include "../ext/imgui/imgui_impl_dx11.h"
 #include "menu/menu.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -90,7 +92,8 @@ void Base::Detach(IDXGISwapChain* pSwapChain)
 		return 0;
 		}, Base::module, 0, nullptr);
 
-	if (hThread) CloseHandle(hThread);
+	if (hThread)
+		CloseHandle(hThread);
 }
 
 HRESULT __stdcall Base::hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
@@ -132,30 +135,34 @@ HRESULT __stdcall Base::hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval,
 		return oPresent(pSwapChain, SyncInterval, Flags);
 	}
 
-	if (Config::Aim::Aimbot)
-	{
-		Cheats::Aim::Aimbot();
-	}
+	//if (Cheats::isInGame()) {
+		if (Config::Aim::Aimbot)
+		{
+			Cheats::Aim::Aimbot();
+		}
 
-	if (Config::Aim::TriggerBot)
-	{
-		Cheats::Aim::Triggerbot();
-	}
+		if (Config::Aim::TriggerBot)
+		{
+			Cheats::Aim::Triggerbot();
+		}
 
-	if (Config::Visuals::ESP)
-	{
-		Cheats::Visuals::ESP();
-	}
+		if (Config::Visuals::ESP)
+		{
+			Cheats::Visuals::ESP();
+		}
 
-	if (Config::Visuals::BonesESP)
-	{
-		Cheats::Visuals::BonesESP();
-	}
+		if (Config::Visuals::BonesESP)
+		{
+			Cheats::Visuals::BonesESP();
+		}
 
-	if (Config::Misc::Bhop)
-	{
-		Cheats::Misc::Bhop();
-	}
+		if (Config::Misc::Bhop)
+		{
+			Cheats::Misc::Bhop();
+		}
+
+		//Cheats::Visuals::Skinchanger();
+	//}
 
 	ImGui::Render();
 

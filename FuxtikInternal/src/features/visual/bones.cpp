@@ -7,6 +7,25 @@
 #include "../../math/math.h"
 #include "../../math/vector.h"
 
+BoneConnection boneConnections[] = {
+	BoneConnection(6, 5),
+	BoneConnection(5, 4),
+	BoneConnection(4, 0),
+	BoneConnection(4, 8),
+	BoneConnection(8, 9),
+	BoneConnection(9, 11),
+	BoneConnection(4, 13),
+	BoneConnection(13, 14),
+	BoneConnection(14, 16),
+	BoneConnection(4, 2),
+	BoneConnection(0, 22),
+	BoneConnection(0, 25),
+	BoneConnection(22, 23),
+	BoneConnection(23, 24),
+	BoneConnection(25, 26),
+	BoneConnection(26, 27)
+};
+
 void Cheats::Visuals::BonesESP()
 {
 	float(*ViewMatrix)[4][4] = (float(*)[4][4])(Cheats::client + Offsets::dwViewMatrix);

@@ -11,6 +11,9 @@ namespace Offsets
     constexpr std::ptrdiff_t dwViewMatrix = 0x1AA45F0;
     constexpr std::ptrdiff_t dwViewAngles = 0x1AAE880;
 
+    constexpr std::ptrdiff_t dwNetworkGameClient = 0x53FCE0;
+    constexpr std::ptrdiff_t dwNetworkGameClient_signOnState = 0x228;
+
     constexpr std::ptrdiff_t m_hPlayerPawn = 0x814;
     constexpr std::ptrdiff_t m_iHealth = 0x344;
     constexpr std::ptrdiff_t m_iTeamNum = 0x3E3;
@@ -143,4 +146,13 @@ namespace Offsets
             constexpr std::ptrdiff_t m_modelState = 0x170;
         }
     }
+
+    constexpr std::ptrdiff_t m_hMyWeapons = 0x40;
+    constexpr std::ptrdiff_t m_hActiveWeapon = 0x58;
+    constexpr std::ptrdiff_t m_hLastWeapon = 0x5C;
+
+    constexpr std::ptrdiff_t m_iItemDefinitionIndex = 0x1BA;
+    constexpr std::ptrdiff_t m_nFallbackPaintKit = 0x15F8;
+    constexpr std::ptrdiff_t m_iItemIDHigh = 0x1D0;
+    constexpr std::ptrdiff_t m_flFallbackWear = 0x1600;
 }

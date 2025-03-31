@@ -3,6 +3,11 @@
 #include <dxgi.h>
 #include <cstdbool>
 #include "base.h"
+#include "features/cheats.h"
+#include "features/aim/aimbot.h"
+#include "features/aim/triggerbot.h"
+#include "features/visual/bones.h"
+#include "features/visual/visuals.h"
 #include "../ext/kiero/kiero.h"
 #include "../ext/imgui/imgui.h"
 #include "../ext/imgui/imgui_impl_win32.h"
@@ -26,7 +31,7 @@ DWORD WINAPI InitHooksThread(LPVOID lpReserved)
 	{
 		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
 		{
-			kiero::bind(8, (void**)& Base::oPresent, Base::hkPresent);
+			kiero::bind(8, (void**)&Base::oPresent, Base::hkPresent);
 			init_hook = true;
 		}
 	} while (!init_hook);
@@ -48,5 +53,6 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 		kiero::shutdown();
 		break;
 	}
+
 	return TRUE;
 }

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdexcept>
+#include <thread>
 #include "../../config/config.h"
 #include "../../base.h"
 
@@ -12,26 +13,21 @@ static void SendClick(HWND Window) /* TODO Make it not lag like shit when lookin
 {
 	if (GetForegroundWindow() != Window)
 		return;
-	
-	isDirty = true;
 
 	INPUT input = { 0 };
+
 	input.type = INPUT_MOUSE;
 	input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
 	SendInput(1, &input, sizeof(INPUT));
 
 	input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
 	SendInput(1, &input, sizeof(INPUT));
-
-	int delay = 3 + rand() % (29 - 20 + 1);
-	Sleep(delay);
-
-	isDirty = false;
 }
 
 static inline bool ShouldFire(uint32_t entityTeam, uint32_t playerTeam, uint32_t entityHealth)
-{ /* todo can add a SHOOT_ON_TEAMMATES for deathmatch */
-	if (entityHealth > 0 && entityTeam != playerTeam) return true;
+{
+	if (entityHealth > 0 && (entityTeam != playerTeam && Config::DeathmatchMode != true))
+		return true;
 	return false;
 }
 
@@ -49,36 +45,30 @@ static uintptr_t GetEntity(uint32_t entityId)
 
 void Cheats::Aim::Triggerbot()
 {
-	if (isDirty) return;
+	auto localPawn = *(uintptr_t*)(Cheats::client + Offsets::dwLocalPlayerPawn);
+	if (!localPawn) {
+		return;
+	}
 
-	__try {
-		auto localPawn = *(uintptr_t*)(Cheats::client + Offsets::dwLocalPlayerPawn);
-		if (!localPawn) {
-			return;
-		}
+	auto entityId = *(uint32_t*)(localPawn + Offsets::C_BaseEntity::m_iIDEntIndex);
 
-		auto entityId = *(uint32_t*)(localPawn + Offsets::C_BaseEntity::m_iIDEntIndex);
+	auto entityList = *(uintptr_t*)(Cheats::client + Offsets::dwEntityList);
+	if (!entityList) {
+		return;
+	}
 
-		entityList = *(uintptr_t*)(Cheats::client + Offsets::dwEntityList);
-		if (!entityList) {
-			return;
-		}
+	if (entityId > 0) {
+		auto entity = GetEntity(entityId);
 
-		if (entityId > 0) {
-			auto entity = GetEntity(entityId);
+		if (entity) {
+			uint32_t entityTeam = *(uint32_t*)(entity + Offsets::C_BaseEntity::m_iTeamNum);
+			uint32_t entityHealth = *(uint32_t*)(entity + Offsets::C_BaseEntity::m_iHealth);
+			uint32_t playerTeam = *(uint32_t*)(localPawn + Offsets::C_BaseEntity::m_iTeamNum);
 
-			if (entity) {
-				uint32_t entityTeam = *(uint32_t*)(entity + Offsets::C_BaseEntity::m_iTeamNum);
-				uint32_t entityHealth = *(uint32_t*)(entity + Offsets::C_BaseEntity::m_iHealth);
-				uint32_t playerTeam = *(uint32_t*)(localPawn + Offsets::C_BaseEntity::m_iTeamNum);
-
-				if (entityHealth > 0 && (entityTeam != playerTeam || Config::DeathmatchMode == true)) {
-					SendClick(Base::window);
-				}
+			if (entityHealth > 0 && (entityTeam != playerTeam || Config::DeathmatchMode == true)) {
+				SendClick(Base::window);
+				Sleep(10);
 			}
 		}
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER) {
-		return;
 	}
 }

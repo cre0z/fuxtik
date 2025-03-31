@@ -36,6 +36,8 @@ namespace Config
 		extern float AimbotSmoothing;
 		extern int AimbotTargetBone;
 		extern bool RCS;
+
 		extern bool TriggerBot;
+		extern int TriggerBotDelay;
 	}
 }

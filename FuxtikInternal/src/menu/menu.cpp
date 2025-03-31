@@ -181,8 +181,9 @@ void RenderAimTab()
 
     ImGui::Separator();
 
+    ImGui::SameLine();
     ImGui::Checkbox("Triggerbot", &Config::Aim::TriggerBot);
-    ImGui::Text("Aimbot settings go here.");
+    ImGui::SliderInt("Triggerbot Delay", &Config::Aim::TriggerBotDelay, 0, 300);
 }
 
 void RenderVisualsTab()
